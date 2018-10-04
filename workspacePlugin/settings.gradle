@@ -1,0 +1,21 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:4.0.0'
+    }
+}
+apply plugin: 'biz.aQute.bnd.workspace'
+
+import aQute.bnd.osgi.Macro;
+import aQute.bnd.osgi.Processor;
+
+Processor p = new Processor();
+Macro m = new Macro(p);
+
+gradle.projectsLoaded { gradle ->
+    for (def t : gradle.getRootProject().getTasksByName('jar', true)) {
+        t.inputs.property("time", m._tstamp(new String[0]))
+    }
+}
